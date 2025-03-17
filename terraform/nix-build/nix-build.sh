@@ -13,7 +13,7 @@ if [[ ${special_args-} == "{}" ]]; then
   # no special arguments, proceed as normal
   if [[ -n ${file-} ]] && [[ -e ${file-} ]]; then
     # shellcheck disable=SC2086
-    out=$(nix build --no-link --json $options -f "$file" "$attribute")
+    out=$(nix build --no-link --json "$options" -f "$file" "$attribute")
   else
     # shellcheck disable=SC2086
     out=$(nix build --no-link --json ${options} "$attribute")
