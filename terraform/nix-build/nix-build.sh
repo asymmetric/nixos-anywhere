@@ -5,7 +5,7 @@ set -x
 declare file attribute nix_options special_args
 eval "$(jq -r '@sh "attribute=\(.attribute) file=\(.file) nix_options=\(.nix_options) special_args=\(.special_args)"')"
 if [ "${nix_options}" != '{"options":{}}' ]; then
-  options=$(echo "${nix_options}" | jq -r '.options | to_entries | map("--option \(.key) \"\(.value)\"") | join(" ")')
+  options=$(echo "${nix_options}" | jq -r '.options | to_entries | map("--option \(.key) \(.value)") | join(" ")')
 else
   options=""
 fi
