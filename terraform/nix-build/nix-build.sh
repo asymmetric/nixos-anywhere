@@ -5,7 +5,7 @@ set -x
 declare file attribute nix_options special_args
 eval "$(jq -r '@sh "attribute=\(.attribute) file=\(.file) nix_options=\(.nix_options) special_args=\(.special_args)"')"
 if [ "${nix_options}" != '{"options":{}}' ]; then
-  options=$(echo "${nix_options}" | jq -r '.options | to_entries | map("--option \(.key) \(if .value | contains(" ") then "\"\(.value)\"" else .value end)") | join(" ")')
+  eval "options=$(echo "${nix_options}" | jq -r '.options | to_entries | map("--option \(.key) \(if .value | contains(" ") then "\"\(.value)\"" else .value end)") | join(" ")')"
 else
   options=""
 fi
@@ -13,7 +13,7 @@ if [[ ${special_args-} == "{}" ]]; then
   # no special arguments, proceed as normal
   if [[ -n ${file-} ]] && [[ -e ${file-} ]]; then
     # shellcheck disable=SC2086
-    out=$(nix build --no-link --json $options -f "$file" "$attribute")
+    out=$(nix build --no-link --json ${options} -f "$file" "$attribute")
   else
     # shellcheck disable=SC2086
     out=$(nix build --no-link --json ${options} "$attribute")
